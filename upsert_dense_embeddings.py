@@ -4,7 +4,8 @@ import os
 import json
 from typing import List, Iterable
 
-# function that reads file in json line format, result is a tuple where (unique doc id, actual text) --> this is taken from the index bm42 python file from qdrant
+# function that reads file in json line format, result is a tuple
+# where (unique doc id, actual text) --> this is taken from the index bm42 python file from qdrant
 def read_file(docs: str) -> Iterable[str]:
     data = []
     with open(docs, "r") as file:
@@ -13,7 +14,7 @@ def read_file(docs: str) -> Iterable[str]:
             data.append((row["_id"], row["text"])) 
     return data
 
-
+# to use Langchain API, insert your specific properties 
 os.environ["OPENAI_API_KEY"] = ""
 os.environ["AZURE_OPENAI_ENDPOINT"] = ""
 os.environ["OPENAI_API_VERSION"] = "2023-05-15"
@@ -28,8 +29,9 @@ embedding_function = AzureOpenAIEmbeddings(
 
 
 def main():
-
-    dataset = "./corpus.jsonl"
+    
+    #insert path to dataset
+    dataset = "./quora/corpus.jsonl"
     results = (read_file(dataset))
     ids = []
     texts = []
@@ -40,7 +42,8 @@ def main():
         texts.append(text)
     
 
-    # This automatically generates Azure OpenAI embeddings and inserts them into Qdrant.
+    # This automatically generates Azure OpenAI embeddings and inserts them into Qdrant
+    # specify existing collection
     qdrant = QdrantVectorStore.from_texts(texts=texts,
                                         embedding=embedding_function,
                                         ids = ids,
