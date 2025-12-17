@@ -1,18 +1,14 @@
 from qdrant_client import QdrantClient, models
-client = QdrantClient(url="http://localhost:6333", prefer_grpc=True)
+client = QdrantClient(url="http://localhost:6333", prefer_grpc=True)              
 
-                  
-
+# this function updates existing collection's parameters
 def update_collection(collection_name: str):
     client.update_collection(
         collection_name=collection_name,
         optimizer_config=models.OptimizersConfigDiff(),
         )
     return True
-
-from qdrant_client import QdrantClient
-
-
+# this function creates a new collection with thesis specific configuration
 def create_qdrant_collection(collection_name: str):
     client.create_collection(
         collection_name=collection_name,
@@ -29,6 +25,7 @@ def create_qdrant_collection(collection_name: str):
    
 
 def main():
+    # change collection name
     collection_name = "quora_collection"
 
     create_qdrant_collection(collection_name)
