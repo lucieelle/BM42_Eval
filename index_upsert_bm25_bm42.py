@@ -5,7 +5,8 @@ from qdrant_client import QdrantClient, models
 from tqdm import tqdm 
 from qdrant_client.models import PointStruct, VectorParams, Distance
 
-# function that reads file in json line format, result is a tuple where (unique doc id, actual text) --> this is taken from the index bm42 python file from qdrant
+# function that reads file in json line format, result is a tuple
+# where (unique doc id, actual text) --> this is adapted from the index bm42 python file from qdrant
 
 def read_file(docs: str) -> Iterable[str]:
     data = []
@@ -16,7 +17,8 @@ def read_file(docs: str) -> Iterable[str]:
     return data
 
 def index_bm25(documents):
-    model = SparseTextEmbedding(model_name="Qdrant/bm25", avg_len =  181)
+    # adjust avg_len variable to inidivudal collections, otherwise default is 256
+    model = SparseTextEmbedding(model_name="Qdrant/bm25", avg_len =  181) 
     embeddings = list(model.embed(documents))
     return embeddings
 
@@ -28,7 +30,7 @@ def index_bm42(documents):
 def upload_datapoints(ids, embeddings, vector_name):
     points_list = []
     for doc_id, embedding in zip(ids, embeddings):
-        # Safely skip empty sparse vectors
+        # Safely skip empty sparse vectors (will often appear with extremely short texts)
         if len(embedding.values) == 0 or len(embedding.indices) == 0:
             print(f"Skipping doc_id {doc_id} due to empty vector")
             continue
@@ -48,7 +50,7 @@ def upload_datapoints(ids, embeddings, vector_name):
 
 def main():
     VECTOR_NAME = "bm25"
-    dataset = "./corpus.jsonl"
+    dataset = "./quora/corpus.jsonl"
     COLLECTION_NAME = "quora_collection"
 
 
