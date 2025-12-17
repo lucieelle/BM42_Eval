@@ -20,6 +20,7 @@ Experiments are performed on selected datasets from the **BEIR benchmark**, all 
 - General-domain deduplication (Quora)
 - Biomedical information retrieval (TREC-COVID)
 - Scientific fact verification (SciFact)
+- retrieve from https://github.com/beir-cellar/beir
 
 The pipeline is constructed with the objective to evaluate and analyze **retrieval quality, ranking quality, interpretability, and robustness across sparse vs. dense relevance distributions**.
 
